@@ -61,11 +61,20 @@ public class HashChainVerifier {
                     return invalid(tenantId, streamId, events.size(), event.sequenceNumber(),
                             "Active event has no payload");
                 }
-                String expectedHash = hasher.hash(
-                        event.tenantId(), event.streamId(), event.sequenceNumber(), event.eventId(),
+                String payloadJson = hasher.canonicalPayload(event.payload());
+                String calculatedPayloadHash = hasher.payloadHash(payloadJson);
+                if (!HashChainHasher.LEGACY_ALGORITHM.equals(event.hashAlgorithm())
+                        && !calculatedPayloadHash.equals(event.payloadHash())) {
+                    return invalid(tenantId, streamId, events.size(), event.sequenceNumber(),
+                            "Payload digest mismatch");
+                }
+                String expectedHash = HashChainHasher.LEGACY_ALGORITHM.equals(event.hashAlgorithm())
+                        ? hasher.legacyHash(event.tenantId(), event.streamId(), event.sequenceNumber(),
+                        event.eventId(), event.eventType(), event.actorId(), event.resourceType(),
+                        event.resourceId(), event.occurredAt().toString(), payloadJson, event.previousHash())
+                        : hasher.hash(event.tenantId(), event.streamId(), event.sequenceNumber(), event.eventId(),
                         event.eventType(), event.actorId(), event.resourceType(), event.resourceId(),
-                        event.occurredAt().toString(), hasher.canonicalPayload(event.payload()),
-                        event.previousHash());
+                        event.occurredAt().toString(), payloadJson, event.previousHash());
                 if (!expectedHash.equals(event.eventHash())) {
                     return invalid(tenantId, streamId, events.size(), event.sequenceNumber(), "Event hash mismatch");
                 }

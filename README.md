@@ -8,7 +8,19 @@ Runnable Java 21 / Spring Boot 3 MVP for append-only, tenant-scoped audit events
 tasks, acceptance criteria, AI-assisted execution protocol, quality gates,
 security controls, risk management, human approval points, and final
 engineering summary requirements. `AI_USAGE_LOG.md` records generated, edited,
-and rejected AI output with rationale and validation status.
+and rejected AI output with rationale and validation status. `SCENARIO_B.md`
+contains the retention, redaction, hash-version, and export design.
+`SCENARIO_A.md`, `SCENARIO_B.md`, and `SCENARIO_C.md` contain concise scenario
+requirements, scope, and acceptance summaries. `TRADEOFFS_AND_CHALLENGES.md`
+records cross-scenario alignment, design trade-offs, engineering challenges,
+and release guardrails.
+`REQUIREMENTS_HLD_LLD.md` is the dedicated core requirements, HLD, LLD,
+functional/non-functional requirements, execution, quality-gate, and oversight
+specification for all three scenarios.
+`SETUP.md` contains complete local prerequisites, startup, smoke-test,
+Scenario B operation, and troubleshooting instructions. `FINAL_ENGINEERING_SUMMARY.md`
+records the delivered artifacts, validation approach, risks, trade-offs,
+assumptions, and release limitations.
 
 ## High-level requirements
 
@@ -112,6 +124,8 @@ There are deliberately no update or delete endpoints.
 
 ## Run
 
+For the complete setup sequence, see [`SETUP.md`](SETUP.md).
+
 The default configuration expects PostgreSQL at `localhost:5432`:
 
 ```text
@@ -185,15 +199,11 @@ deployment responsibilities.
 
 ## Scenario C clarification and scope
 
-Scenario C is defined as the operational integrity phase: retention/archiving,
-redaction, and independently transferable exports must preserve the chain
-without claiming external immutability. This implementation scopes C to
-tenant/stream-local PostgreSQL rows, explicit archive operations, SHA-256
-manifests, and self-contained JSON bundles. It does not claim WORM storage,
-external signatures, authorization, encryption/key management, or a
-cryptographically independent checkpoint. Those require an approved
-deployment design, key ownership, retention/legal review, and integration
-tests against the selected archive provider before production commitment.
+`SCENARIO_C.md` normalizes the ambiguous requirement that regulators must audit
+access to client account data. It maps compliance evidence to the Scenario A
+event contract and Scenario B lifecycle/export controls, while explicitly
+scoping out authentication, regulator-specific reporting, legal holds, and
+jurisdictional policy until those decisions receive human approval.
 
 ## Test
 
@@ -216,3 +226,10 @@ operational monitoring, and an external checkpoint/attestation mechanism.
 Future phases can add an outbox-backed Kafka adapter (without making append
 availability depend on Kafka), external checkpoint publication and verification,
 retention/archival policy, and stronger concurrency/load testing.
+
+## Submission documentation
+
+* [`ATTESTATION.md`](ATTESTATION.md) — engineer assignment attestation.
+* [`FINAL_ENGINEERING_SUMMARY.md`](FINAL_ENGINEERING_SUMMARY.md) — final plan,
+  artifacts, validation, risks, assumptions, and limitations.
+* [`SETUP.md`](SETUP.md) — local setup and end-to-end verification.

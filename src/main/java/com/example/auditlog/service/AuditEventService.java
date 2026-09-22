@@ -176,7 +176,8 @@ public class AuditEventService {
         AuditEvent event = new AuditEvent(command.tenantId(), command.streamId(), sequence, eventId,
                 command.idempotencyKey(), command.eventType(), command.actorId(), command.resourceType(),
                 command.resourceId(), occurredAt, command.payload(), previousHash, hash,
-                Instant.now().truncatedTo(ChronoUnit.MICROS), false, null, null, null);
+                HashChainHasher.PAYLOAD_DIGEST_ALGORITHM, Instant.now().truncatedTo(ChronoUnit.MICROS),
+                false, null, null, hasher.payloadHash(payloadJson));
         try {
             repository.insert(event, payloadJson);
             return event;

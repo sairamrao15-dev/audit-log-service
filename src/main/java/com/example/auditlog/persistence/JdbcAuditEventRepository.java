@@ -35,8 +35,8 @@ public class JdbcAuditEventRepository implements AuditEventRepository {
         Optional<AuditEvent> active = findOne("""
                 SELECT tenant_id, stream_id, sequence_number, event_id, idempotency_key, event_type,
                        actor_id, resource_type, resource_id, occurred_at, payload_json, previous_hash,
-                       event_hash, created_at, false AS archived, NULL AS archive_id,
-                       NULL AS archive_manifest_hash, NULL AS payload_hash
+                       event_hash, hash_algorithm, created_at, false AS archived, NULL AS archive_id,
+                       NULL AS archive_manifest_hash, payload_hash
                 FROM audit_events
                 WHERE tenant_id = ? AND stream_id = ? AND idempotency_key = ?
                 """, tenantId, streamId, idempotencyKey);
@@ -50,8 +50,8 @@ public class JdbcAuditEventRepository implements AuditEventRepository {
         Optional<AuditEvent> active = findOne("""
                 SELECT tenant_id, stream_id, sequence_number, event_id, idempotency_key, event_type,
                        actor_id, resource_type, resource_id, occurred_at, payload_json, previous_hash,
-                       event_hash, created_at, false AS archived, NULL AS archive_id,
-                       NULL AS archive_manifest_hash, NULL AS payload_hash
+                       event_hash, hash_algorithm, created_at, false AS archived, NULL AS archive_id,
+                       payload_hash
                 FROM audit_events
                 WHERE tenant_id = ? AND event_id = ?
                 """, tenantId, eventId.toString());
@@ -89,12 +89,12 @@ public class JdbcAuditEventRepository implements AuditEventRepository {
                 INSERT INTO audit_events
                     (tenant_id, stream_id, sequence_number, event_id, idempotency_key, event_type,
                      actor_id, resource_type, resource_id, occurred_at, payload_json, previous_hash,
-                     event_hash, created_at)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     event_hash, hash_algorithm, payload_hash, created_at)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                 """, event.tenantId(), event.streamId(), event.sequenceNumber(), event.eventId().toString(),
                 event.idempotencyKey(), event.eventType(), event.actorId(), event.resourceType(),
                 event.resourceId(), event.occurredAt(), payloadJson, event.previousHash(),
-                event.eventHash(), event.createdAt());
+                event.eventHash(), event.hashAlgorithm(), hasher.payloadHash(payloadJson), event.createdAt());
     }
 
     @Override
@@ -110,13 +110,13 @@ public class JdbcAuditEventRepository implements AuditEventRepository {
                 SELECT * FROM (
                     SELECT tenant_id, stream_id, sequence_number, event_id, idempotency_key, event_type,
                            actor_id, resource_type, resource_id, occurred_at, payload_json, previous_hash,
-                           event_hash, created_at, false AS archived, NULL AS archive_id,
-                           NULL AS archive_manifest_hash, NULL AS payload_hash
+                           event_hash, hash_algorithm, created_at, false AS archived, NULL AS archive_id,
+                           NULL AS archive_manifest_hash, payload_hash
                     FROM audit_events
                     UNION ALL
                     SELECT tenant_id, stream_id, sequence_number, event_id, idempotency_key, event_type,
                            actor_id, resource_type, resource_id, occurred_at, payload_json, previous_hash,
-                           event_hash, created_at, true AS archived, archive_id,
+                           event_hash, hash_algorithm, created_at, true AS archived, archive_id,
                            archive_manifest_hash, payload_hash
                     FROM audit_event_archives
                 ) events
@@ -166,13 +166,13 @@ public class JdbcAuditEventRepository implements AuditEventRepository {
                 SELECT * FROM (
                     SELECT tenant_id, stream_id, sequence_number, event_id, idempotency_key, event_type,
                            actor_id, resource_type, resource_id, occurred_at, payload_json, previous_hash,
-                           event_hash, created_at, false AS archived, NULL AS archive_id,
-                           NULL AS archive_manifest_hash, NULL AS payload_hash
+                           event_hash, hash_algorithm, created_at, false AS archived, NULL AS archive_id,
+                           NULL AS archive_manifest_hash, payload_hash
                     FROM audit_events
                     UNION ALL
                     SELECT tenant_id, stream_id, sequence_number, event_id, idempotency_key, event_type,
                            actor_id, resource_type, resource_id, occurred_at, payload_json, previous_hash,
-                           event_hash, created_at, true AS archived, archive_id,
+                           event_hash, hash_algorithm, created_at, true AS archived, archive_id,
                            archive_manifest_hash, payload_hash
                     FROM audit_event_archives
                 ) events WHERE tenant_id = ? AND """ + predicate
@@ -188,12 +188,12 @@ public class JdbcAuditEventRepository implements AuditEventRepository {
                     INSERT INTO audit_event_archives
                     (tenant_id, stream_id, sequence_number, event_id, idempotency_key, event_type,
                      actor_id, resource_type, resource_id, occurred_at, payload_json, previous_hash,
-                     event_hash, created_at, archive_id, archive_manifest_hash, payload_hash)
-                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                     event_hash, hash_algorithm, created_at, archive_id, archive_manifest_hash, payload_hash)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
                     """, event.tenantId(), event.streamId(), event.sequenceNumber(), event.eventId().toString(),
                     event.idempotencyKey(), event.eventType(), event.actorId(), event.resourceType(),
                     event.resourceId(), event.occurredAt(), null, event.previousHash(),
-                    event.eventHash(), event.createdAt(), archiveId, archiveManifestHash,
+                    event.eventHash(), event.hashAlgorithm(), event.createdAt(), archiveId, archiveManifestHash,
                     payloadJson == null ? null : hasher.payloadHash(payloadJson));
         }
     }
@@ -210,7 +210,7 @@ public class JdbcAuditEventRepository implements AuditEventRepository {
         return """
                 SELECT tenant_id, stream_id, sequence_number, event_id, idempotency_key, event_type,
                        actor_id, resource_type, resource_id, occurred_at, payload_json, previous_hash,
-                       event_hash, created_at, true AS archived, archive_id,
+                       event_hash, hash_algorithm, created_at, true AS archived, archive_id,
                        archive_manifest_hash, payload_hash
                 FROM audit_event_archives
                 """;
@@ -250,6 +250,7 @@ public class JdbcAuditEventRepository implements AuditEventRepository {
                         payload,
                         rs.getString("previous_hash"),
                         rs.getString("event_hash"),
+                        rs.getString("hash_algorithm"),
                         rs.getTimestamp("created_at").toInstant(),
                         rs.getBoolean("archived"),
                         rs.getString("archive_id"),

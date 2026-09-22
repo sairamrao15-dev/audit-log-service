@@ -42,6 +42,19 @@ acceptance criteria, owner, and status. The current dependency order is:
 No dependent task is considered complete based only on generated code; its
 acceptance criteria and quality gates must be recorded.
 
+### Current pending work
+
+The task register currently has two pending items:
+
+* **KAFKA** — implement versioned Kafka ingress/egress adapters, partitioning,
+  retries, dead-letter handling, consumer idempotency, schema compatibility,
+  and observability. This depends on the append integrity core and requires
+  broker-backed contract and failure tests.
+* **OPS** — add authentication/authorization, metrics, tracing, Kubernetes
+  deployment, backup/restore verification, load and failure testing, and
+  security runbooks. This depends on REST, Kafka, and attestation/archive
+  capabilities and requires human approval before production use.
+
 ## 3. AI-assisted execution protocol
 
 AI may assist with analysis, implementation, debugging, refactoring, test
@@ -108,4 +121,3 @@ Every release or major task completion must include:
 * validation results and any blocked gates;
 * required follow-up work;
 * named engineer approval for high-impact changes.
-

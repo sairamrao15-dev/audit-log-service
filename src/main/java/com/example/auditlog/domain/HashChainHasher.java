@@ -12,6 +12,9 @@ import java.util.UUID;
 
 @Component
 public class HashChainHasher {
+    public static final String LEGACY_ALGORITHM = "SHA-256-RAW-PAYLOAD-V1";
+    public static final String PAYLOAD_DIGEST_ALGORITHM = "SHA-256-PAYLOAD-DIGEST-V2";
+
     private final CanonicalJson canonicalJson;
 
     public HashChainHasher(ObjectMapper objectMapper) {
@@ -24,22 +27,34 @@ public class HashChainHasher {
 
     public String hash(String tenantId, String streamId, long sequenceNumber, UUID eventId,
                        String eventType, String occurredAt, String payloadJson, String previousHash) {
-        return hash(tenantId, streamId, sequenceNumber, eventId, eventType,
+        return legacyHash(tenantId, streamId, sequenceNumber, eventId, eventType,
                 null, null, null, occurredAt, payloadJson, previousHash);
     }
 
     public String hash(String tenantId, String streamId, long sequenceNumber, UUID eventId,
                        String eventType, String actorId, String resourceType, String resourceId,
                        String occurredAt, String payloadJson, String previousHash) {
-        if (actorId == null && resourceType == null && resourceId == null) {
-            return digest(String.join("|",
-                    part(tenantId), part(streamId), part(Long.toString(sequenceNumber)), part(eventId.toString()),
-                    part(eventType), part(occurredAt), part(payloadJson), part(previousHash)));
-        }
         String material = String.join("|",
                 part(tenantId), part(streamId), part(Long.toString(sequenceNumber)), part(eventId.toString()),
                 part(eventType), part(actorId), part(resourceType), part(resourceId),
-                part(occurredAt), part(payloadJson), part(previousHash));
+                part(occurredAt), part(payloadHash(payloadJson)), part(previousHash));
+        return digest(material);
+    }
+
+    public String legacyHash(String tenantId, String streamId, long sequenceNumber, UUID eventId,
+                             String eventType, String actorId, String resourceType, String resourceId,
+                             String occurredAt, String payloadJson, String previousHash) {
+        String material;
+        if (actorId == null && resourceType == null && resourceId == null) {
+            material = String.join("|",
+                    part(tenantId), part(streamId), part(Long.toString(sequenceNumber)), part(eventId.toString()),
+                    part(eventType), part(occurredAt), part(payloadJson), part(previousHash));
+        } else {
+            material = String.join("|",
+                    part(tenantId), part(streamId), part(Long.toString(sequenceNumber)), part(eventId.toString()),
+                    part(eventType), part(actorId), part(resourceType), part(resourceId),
+                    part(occurredAt), part(payloadJson), part(previousHash));
+        }
         return digest(material);
     }
 
@@ -55,6 +70,7 @@ public class HashChainHasher {
                 + part(event.resourceType()) + ":" + part(event.resourceId()) + ":"
                 + part(event.occurredAt().toString()) + ":" + part(event.createdAt().toString()) + ":"
                 + part(event.previousHash()) + ":" + event.eventHash() + ":"
+                + part(event.hashAlgorithm()) + ":"
                 + part(event.payloadHash() != null ? event.payloadHash()
                 : event.payload() == null ? null : payloadHash(canonicalPayload(event.payload()))))
                 .collect(java.util.stream.Collectors.joining("|"));

@@ -101,3 +101,168 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: POM and repository references inspected; whitespace
   validation completed. Maven/Java execution remains unavailable.
 - Human sign-off: pending
+
+### 2026-09-21 — SCENARIO-B — Retention, redaction, and bulk export hardening
+- Intent: Make the Scenario B implementation explicit, reusable for archival
+  retrieval, and safe to verify without retaining archived payloads.
+- Constraints and technical context: Preserve legacy chain verification, avoid
+  raw sensitive payload text in new hash material and archive metadata, and
+  provide honest export completeness boundaries.
+- Prompt/approach summary: AI reviewed the existing archive/redaction/export
+  implementation, added migration V3, versioned payload-digest hashing,
+  payload-digest verification, and `SCENARIO_B.md`.
+- AI result: edited
+- Engineer changes and rationale: New records use
+  `SHA-256-PAYLOAD-DIGEST-V2`; legacy records retain their original algorithm
+  identifier so historical data is not silently reinterpreted.
+- Validation performed: Source, SQL column/value arity, and documentation
+  inspection completed. Maven tests remain blocked because Java and Maven are
+  unavailable in the execution environment.
+- Human sign-off: pending
+
+### 2026-09-22 — SCENARIO-A — Core audit service specification
+- Intent: Document the core greenfield requirements and validation walkthrough
+  as the contract shared by the implementation and Scenario B/C extensions.
+- Constraints and technical context: Align event fields, timestamp behavior,
+  append-only semantics, filtering, pagination, hash versions, archive-aware
+  verification, and direct-database tamper detection.
+- Prompt/approach summary: AI created `SCENARIO_A.md` and linked it from the
+  README without changing API behavior.
+- AI result: generated
+- Engineer changes and rationale: The document distinguishes required core
+  behavior, compatibility aliases, production assumptions, and deferred
+  controls so Scenario B/C do not redefine the Scenario A contract.
+- Validation performed: Documentation cross-referenced against the current
+  controllers, hash implementation, migrations, tests, `SCENARIO_B.md`, and
+  `SCENARIO_C.md`.
+- Human sign-off: pending
+
+### 2026-09-22 — ALIGNMENT — Cross-scenario review and trade-offs
+- Intent: Check Scenarios A, B, and C against the requested requirements and
+  make trade-offs, challenges, boundaries, and validation guardrails explicit.
+- Constraints and technical context: Scenario C needed to address the
+  ambiguous compliance-reporting requirement rather than duplicate Scenario B.
+- Prompt/approach summary: AI reviewed all scenario documents and README,
+  corrected Scenario C, added `TRADEOFFS_AND_CHALLENGES.md`, and cross-linked
+  the shared reference.
+- AI result: edited
+- Engineer changes and rationale: The documents now share one event/hash/
+  archival contract while distinguishing implemented assignment scope from
+  production compliance controls.
+- Validation performed: Cross-document consistency review and `git diff --check`
+  completed. Automated tests remain unavailable because Java and Maven are not
+  installed.
+- Human sign-off: pending
+
+### 2026-09-22 — SCENARIO-A-HLD-LLD — Core engineering specification
+- Intent: Expand Scenario A from an API overview into a complete core-service
+  HLD/LLD and engineering execution specification.
+- Constraints and technical context: Align with the implemented Spring Boot,
+  PostgreSQL, Flyway, versioned hash, archival, export, and verification model
+  without claiming deferred production controls.
+- Prompt/approach summary: AI updated `SCENARIO_A.md` with system boundaries,
+  components, data flow, persistence, hash contract, transactions,
+  verification, task decomposition, AI governance, quality gates, risks, and
+  final-summary requirements.
+- AI result: edited
+- Engineer changes and rationale: The document now provides actionable
+  dependency-ordered tasks and explicit human approval gates for high-impact
+  integrity, schema, privacy, and deployment decisions.
+- Validation performed: Cross-reference and source-alignment review completed;
+  automated build/test execution remains blocked because Java and Maven are
+  unavailable.
+- Human sign-off: pending
+
+### 2026-09-22 — CORE-HLD-LLD — Dedicated architecture reference
+- Intent: Provide a standalone document showcasing the core requirements,
+  high-level design, low-level design, execution plan, AI controls, quality
+  gates, risks, and final engineering summary.
+- Constraints and technical context: Keep the reference aligned with the
+  implemented REST, PostgreSQL, Flyway, hash, archive, export, and verifier
+  behavior.
+- Prompt/approach summary: AI created `REQUIREMENTS_HLD_LLD.md` and
+  cross-linked it from `SCENARIO_A.md` and `README.md`.
+- AI result: generated
+- Engineer changes and rationale: The architecture content is now available
+  as a single reviewable artifact instead of being embedded only in Scenario A.
+- Validation performed: Cross-document references and repository structure
+  inspected; automated Maven tests remain blocked because Java and Maven are
+  unavailable.
+- Human sign-off: pending
+
+### 2026-09-22 — CORE-NFR — Unified functional and non-functional specification
+- Intent: Make the HLD/LLD document the single technical source for Scenarios
+  A, B, and C, including senior-engineering non-functional requirements.
+- Constraints and technical context: Keep scenario files concise and
+  requirement-focused while centralizing implementation, performance,
+  reliability, security, privacy, compatibility, and operational details.
+- Prompt/approach summary: AI added cross-scenario functional/NFR sections to
+  `REQUIREMENTS_HLD_LLD.md` and reduced the three scenario files to
+  high-level scope, ambiguity, acceptance, and reference content.
+- AI result: edited
+- Engineer changes and rationale: Technical duplication was removed from the
+  scenario summaries so hash, schema, API, quality, risk, and oversight
+  decisions have one maintained source.
+- Validation performed: Cross-document links, scenario coverage, and
+  `git diff --check` reviewed. Automated Maven tests remain blocked because
+  Java and Maven are unavailable.
+- Human sign-off: pending
+
+### 2026-09-22 — PENDING-TODOS — Kafka and operations hardening
+- Intent: Add the two remaining pending engineering tasks to the maintained
+  requirements and workflow documentation.
+- Constraints and technical context: The task register identifies Kafka
+  integration and production operations hardening as pending, with operations
+  dependent on the integration and attestation work.
+- Prompt/approach summary: AI queried the session task register, confirmed the
+  two pending items, and added their intent, sequencing, acceptance criteria,
+  risks, and quality expectations to `ENGINEERING_WORKFLOW.md` and
+  `REQUIREMENTS_HLD_LLD.md`.
+- AI result: edited
+- Engineer changes and rationale: The pending scope is now visible in both the
+  operational task workflow and the consolidated technical specification;
+  neither task is represented as implemented.
+- Validation performed: Pending-task query, documentation cross-reference
+  review, and `git diff --check` completed. Automated build/test execution
+  remains blocked because Java and Maven are unavailable.
+- Human sign-off: pending
+
+### 2026-09-22 — SUBMISSION-DOCS — Setup and final engineering summary
+- Intent: Complete the repository submission documentation with runnable setup
+  instructions and a final engineering summary covering artifacts, validation,
+  risks, trade-offs, assumptions, and limitations.
+- Constraints and technical context: Documentation must reflect the actual
+  Java 21/Maven/PostgreSQL prototype, distinguish implemented behavior from
+  deferred production controls, and avoid claiming tests that could not run.
+- Prompt/approach summary: AI audited the existing Markdown set and added
+  `SETUP.md` and `FINAL_ENGINEERING_SUMMARY.md`, expanded `ATTESTATION.md`, and
+  linked the submission artifacts from `README.md`.
+- AI result: edited
+- Engineer changes and rationale: Setup examples use the existing REST routes,
+  environment variables, Flyway behavior, H2 test profile, and honest Kafka
+  boundary. The summary consolidates the existing design rather than
+  introducing new implementation claims.
+- Validation performed: Cross-reference review, repository status inspection,
+  and `git diff --check`. Automated build/test execution remains blocked
+  because Java and Maven are unavailable.
+- Human sign-off: pending
+
+### 2026-09-22 — SETUP-KAFKA — Kafka delivery and consumer idempotency guidance
+- Intent: Document at-most-once and at-least-once Kafka delivery choices and
+  durable consumer-side idempotency handling in the local setup guide.
+- Constraints and technical context: Kafka is disabled in the current
+  prototype; documentation must not claim an implemented broker adapter or
+  exactly-once behavior.
+- Prompt/approach summary: AI updated `SETUP.md` with illustrative Spring
+  Kafka settings, offset-commit timing, producer durability settings, and a
+  durable inbox/deduplication flow keyed by immutable `eventId`.
+- AI result: edited
+- Engineer changes and rationale: At-least-once is recommended for audit
+  events because loss is generally worse than replay. At-most-once is
+  documented as an explicit loss-tolerant option. Consumer idempotency is
+  required because Kafka delivery mode alone does not protect external side
+  effects.
+- Validation performed: Configuration and endpoint cross-reference review and
+  `git diff --check`. Broker-backed tests remain pending because Kafka is not
+  implemented or enabled in the prototype.
+- Human sign-off: pending

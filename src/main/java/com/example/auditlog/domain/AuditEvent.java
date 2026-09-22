@@ -19,6 +19,7 @@ public record AuditEvent(
         JsonNode payload,
         String previousHash,
         String eventHash,
+        String hashAlgorithm,
         Instant createdAt,
         boolean archived,
         String archiveId,
@@ -29,7 +30,8 @@ public record AuditEvent(
                       String idempotencyKey, String eventType, Instant occurredAt, JsonNode payload,
                       String previousHash, String eventHash, Instant createdAt) {
         this(tenantId, streamId, sequenceNumber, eventId, idempotencyKey, eventType,
-                null, null, null, occurredAt, payload, previousHash, eventHash, createdAt,
+                null, null, null, occurredAt, payload, previousHash, eventHash,
+                "SHA-256-RAW-PAYLOAD-V1", createdAt,
                 false, null, null, null);
     }
 
