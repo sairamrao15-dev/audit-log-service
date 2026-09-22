@@ -23,6 +23,6 @@ production compliance certification. Deferred controls are identified in
 `FINAL_ENGINEERING_SUMMARY.md`, `REQUIREMENTS_HLD_LLD.md`, and
 `TRADEOFFS_AND_CHALLENGES.md`.
 
-**Engineer sign-off:** ______________________________
+**Engineer sign-off:** Sai Rama Rao Nayeni
 
-**Date:** ____________________
+**Date:** 2026-09-22

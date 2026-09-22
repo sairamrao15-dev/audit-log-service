@@ -33,7 +33,7 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: Repository diff and source inspection completed.
   Automated build/test execution was blocked because Java and Maven are not
   installed in the execution environment.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-21 — REQ — Requirements and governance documentation
 - Intent: Normalize greenfield, extension, testing, AI governance, risk, and
@@ -47,7 +47,7 @@ must be updated by the responsible engineer, who owns the final result.
   criteria, quality gates, secure prompting, human approval, and limitations.
 - Validation performed: Documentation reviewed for traceability and alignment
   with the current MVP.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-21 — FND/INT/REST/ATT — Assignment scenarios A, B, and C
 - Intent: Extend the MVP to the required audit envelope, filtering,
@@ -65,7 +65,7 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: Diff whitespace validation and source/constructor/schema
   inspection completed. Automated tests remain blocked because Java and Maven
   are unavailable.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-21 — EXT/ABC — Scenario A/B/C integrity extensions
 - Intent: Extend the MVP with envelope filters, append-only verification,
@@ -84,7 +84,7 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: Source and migration inspection completed. Automated
   tests were not run because Java and Maven are unavailable in the execution
   environment.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-21 — BUILD — Gradle to Maven migration
 - Intent: Replace the Gradle build with a Maven build while preserving the
@@ -100,7 +100,7 @@ must be updated by the responsible engineer, who owns the final result.
   is checked in.
 - Validation performed: POM and repository references inspected; whitespace
   validation completed. Maven/Java execution remains unavailable.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-21 — SCENARIO-B — Retention, redaction, and bulk export hardening
 - Intent: Make the Scenario B implementation explicit, reusable for archival
@@ -118,7 +118,7 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: Source, SQL column/value arity, and documentation
   inspection completed. Maven tests remain blocked because Java and Maven are
   unavailable in the execution environment.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-22 — SCENARIO-A — Core audit service specification
 - Intent: Document the core greenfield requirements and validation walkthrough
@@ -135,7 +135,7 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: Documentation cross-referenced against the current
   controllers, hash implementation, migrations, tests, `SCENARIO_B.md`, and
   `SCENARIO_C.md`.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-22 — ALIGNMENT — Cross-scenario review and trade-offs
 - Intent: Check Scenarios A, B, and C against the requested requirements and
@@ -152,7 +152,7 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: Cross-document consistency review and `git diff --check`
   completed. Automated tests remain unavailable because Java and Maven are not
   installed.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-22 — SCENARIO-A-HLD-LLD — Core engineering specification
 - Intent: Expand Scenario A from an API overview into a complete core-service
@@ -171,7 +171,7 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: Cross-reference and source-alignment review completed;
   automated build/test execution remains blocked because Java and Maven are
   unavailable.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-22 — CORE-HLD-LLD — Dedicated architecture reference
 - Intent: Provide a standalone document showcasing the core requirements,
@@ -188,7 +188,7 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: Cross-document references and repository structure
   inspected; automated Maven tests remain blocked because Java and Maven are
   unavailable.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-22 — CORE-NFR — Unified functional and non-functional specification
 - Intent: Make the HLD/LLD document the single technical source for Scenarios
@@ -206,7 +206,7 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: Cross-document links, scenario coverage, and
   `git diff --check` reviewed. Automated Maven tests remain blocked because
   Java and Maven are unavailable.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-22 — PENDING-TODOS — Kafka and operations hardening
 - Intent: Add the two remaining pending engineering tasks to the maintained
@@ -225,7 +225,7 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: Pending-task query, documentation cross-reference
   review, and `git diff --check` completed. Automated build/test execution
   remains blocked because Java and Maven are unavailable.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-22 — SUBMISSION-DOCS — Setup and final engineering summary
 - Intent: Complete the repository submission documentation with runnable setup
@@ -245,7 +245,7 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: Cross-reference review, repository status inspection,
   and `git diff --check`. Automated build/test execution remains blocked
   because Java and Maven are unavailable.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
 
 ### 2026-09-22 — SETUP-KAFKA — Kafka delivery and consumer idempotency guidance
 - Intent: Document at-most-once and at-least-once Kafka delivery choices and
@@ -265,4 +265,4 @@ must be updated by the responsible engineer, who owns the final result.
 - Validation performed: Configuration and endpoint cross-reference review and
   `git diff --check`. Broker-backed tests remain pending because Kafka is not
   implemented or enabled in the prototype.
-- Human sign-off: pending
+- Human sign-off: Sai Rama Rao Nayeni/ 2026-9-22
